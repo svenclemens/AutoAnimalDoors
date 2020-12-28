@@ -91,13 +91,6 @@ namespace AutoAnimalDoors
             }
         }
 
-
-            {
-                return config.CoopRequiredUpgradeLevel;
-            }
-            return 0;
-        }
-
         /// <summary>This method gets only the animal buildings that are eligible for 
         ///    auto opening/closing based off the config settings.
         /// <example>For example:
@@ -110,20 +103,61 @@ namespace AutoAnimalDoors
         {
             get
             {
-                List<Buildings.AnimalBuilding> eligibleAnimalBuildings = new List<Buildings.AnimalBuilding>(); ;
-                foreach (Farm farm in Game.Instance.Farms)
+                // Checking for eligible buildings is only required if there are non-eligible.
+                if(config.CoopRequiredUpgradeLevel > 1 || config.BarnRequiredUpgradeLevel > 1)
                 {
-                    foreach (Buildings.AnimalBuilding animalBuilding in farm.AnimalBuildings)
-                    {
-                        if (animalBuilding.UpgradeLevel >= GetUpgradeLevelRequirementForBuidlingType(animalBuilding.Type))
-                        {
-                            eligibleAnimalBuildings.Add(animalBuilding);
-                        }
-                    }
+                    return GetOnlyEligibleAnimalBuildings();
                 }
-                return eligibleAnimalBuildings;
+                else
+                {
+                    return GetAllAnimalBuildings();
+                }
+            }
+        }
+
+        private List<Buildings.AnimalBuilding> GetAllAnimalBuildings()
+        {
+            int buildingCount = GetCountOfAnimalBuildings();
+            var result = new List<Buildings.AnimalBuilding>(buildingCount);
+
+            foreach(Farm farm in Game.Instance.Farms)
+            {
+                result.AddRange(farm.AnimalBuildings);
             }
 
+            return result;
+        }
+
+        private List<Buildings.AnimalBuilding> GetOnlyEligibleAnimalBuildings()
+        {
+            int buildingCount = GetCountOfAnimalBuildings();
+
+            List<Buildings.AnimalBuilding> eligibleAnimalBuildings = new List<Buildings.AnimalBuilding>(buildingCount); ;
+            
+            foreach (Farm farm in Game.Instance.Farms)
+            {
+                foreach (Buildings.AnimalBuilding animalBuilding in farm.AnimalBuildings)
+                {
+                    if (animalBuilding.UpgradeLevel >= GetUpgradeLevelRequirementForBuidlingType(animalBuilding.Type))
+                    {
+                        eligibleAnimalBuildings.Add(animalBuilding);
+                    }
+                }
+            }
+
+            return eligibleAnimalBuildings;
+        }
+
+        private int GetCountOfAnimalBuildings()
+        {
+            int buildingCount = 0;
+
+            foreach (Farm farm in Game.Instance.Farms)
+            {
+                buildingCount += farm.AnimalBuildings.Count;
+            }
+
+            return buildingCount;
         }
 
         private void SetAllAnimalDoorsState(Buildings.AnimalDoorState state)
