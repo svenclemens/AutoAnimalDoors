@@ -11,5 +11,6 @@ namespace AutoAnimalDoors.StardewValleyWrapper
         public bool AutoOpenEnabled { get; set; } = true;
         public bool OpenDoorsWhenRaining { get; set; } = false;
         public bool OpenDoorsDuringWinter { get; set; } = false;
+        public bool WarpAnimalsWhileClosingDoors { get; set; } = true;
     }
 }
