@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace AutoAnimalDoors.StardewValleyWrapper
 {
-    public enum Weather { SNOWING, RAINING, LIGHTNING, SUNNY, WINDY };
+    public enum Weather : byte { SNOWING, RAINING, LIGHTNING, SUNNY, WINDY };
     
-    public enum Season { SPRING, SUMMER, FALL, WINTER };
+    public enum Season : byte { SPRING, SUMMER, FALL, WINTER };
 
     class Game
     {

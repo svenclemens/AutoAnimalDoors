@@ -2,9 +2,9 @@
 
 namespace AutoAnimalDoors.StardewValleyWrapper.Buildings
 {
-    public enum AnimalDoorState { OPEN, CLOSED };
+    public enum AnimalDoorState : byte { OPEN, CLOSED };
 
-    public enum AnimalBuildingType { BARN, COOP, OTHER };
+    public enum AnimalBuildingType : byte { BARN, COOP, OTHER };
 
     class AnimalBuilding : Building
     {
