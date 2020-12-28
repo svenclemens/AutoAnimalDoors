@@ -24,7 +24,7 @@ namespace AutoAnimalDoors.StardewValleyWrapper.Buildings
             }
         }
 
-        private List<StardewValley.FarmAnimal> FarmAnimals
+        private IEnumerable<StardewValley.FarmAnimal> FarmAnimals
         {
             get
             {
@@ -103,10 +103,10 @@ namespace AutoAnimalDoors.StardewValleyWrapper.Buildings
             get
             {
                 string buildingTypeString = this.building.buildingType.Value.ToLower();
-                if (buildingTypeString.Contains("coop"))
+                if (buildingTypeString.Contains(@"coop"))
                 {
                     return AnimalBuildingType.COOP;
-                } else if (buildingTypeString.Contains("barn"))
+                } else if (buildingTypeString.Contains(@"barn"))
                 {
                     return AnimalBuildingType.BARN;
                 }
@@ -121,14 +121,14 @@ namespace AutoAnimalDoors.StardewValleyWrapper.Buildings
             {
                 switch (this.building.buildingType.Value.ToLower())
                 {
-                    case "coop":
-                    case "barn":
+                    case @"coop":
+                    case @"barn":
                         return 1;
-                    case "big coop":
-                    case "big barn":
+                    case @"big coop":
+                    case @"big barn":
                         return 2;
-                    case "deluxe coop":
-                    case "deluxe barn":
+                    case @"deluxe coop":
+                    case @"deluxe barn":
                         return 3;
                 }
 

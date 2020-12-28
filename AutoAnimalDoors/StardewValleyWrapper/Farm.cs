@@ -11,7 +11,7 @@ namespace AutoAnimalDoors.StardewValleyWrapper
             this.StardewValleyFarm = farm;
         }
 
-        public List<Buildings.Building> Buildings
+        public IEnumerable<Buildings.Building> Buildings
         {
             get
             {

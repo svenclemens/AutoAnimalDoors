@@ -29,7 +29,7 @@ namespace AutoAnimalDoors.StardewValleyWrapper
             }
         }
 
-        public List<Farm> Farms
+        public IEnumerable<Farm> Farms
         {
             get
             {
