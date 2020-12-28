@@ -22,7 +22,7 @@ namespace AutoAnimalDoors
             StardewValley.Menus.DialogueBox dialogBox = menu as StardewValley.Menus.DialogueBox;
             if (dialogBox != null)
             {
-                List<string> dialogs = this.Helper.Reflection.GetField<List<string>>(dialogBox, "dialogues").GetValue();
+                List<string> dialogs = this.Helper.Reflection.GetField<List<string>>(dialogBox, @"dialogues").GetValue();
                 if (dialogs != null && dialogs.Count >= 1)
                 {
                     return dialogs[0].Equals(StardewValley.Game1.content.LoadString("Strings\\Locations:FarmHouse_Bed_GoToSleep"));
@@ -34,7 +34,7 @@ namespace AutoAnimalDoors
 
         private void OnMenuChanged(object sender, StardewModdingAPI.Events.MenuChangedEventArgs menuChangedEventArgs)
         {
-            if (IsGoToSleepDialog(menuChangedEventArgs.NewMenu))
+            if (!config.WarpAnimalsWhileClosingDoors && IsGoToSleepDialog(menuChangedEventArgs.NewMenu))
             {
                 for(short i = 0; i < this.EligibleAnimalBuildings.Count; ++i)
                 {
@@ -70,17 +70,28 @@ namespace AutoAnimalDoors
                     }
 
                     helper.Events.GameLoop.TimeChanged += this.CloseAnimalDoors;
-                    helper.Events.Display.MenuChanged += this.OnMenuChanged;
+                    if (!config.WarpAnimalsWhileClosingDoors)
+                    {
+                        helper.Events.Display.MenuChanged += this.OnMenuChanged;
+                    }
                 }
             }
         }
 
         private int GetUpgradeLevelRequirementForBuidlingType(Buildings.AnimalBuildingType type)
         {
-            if (type == Buildings.AnimalBuildingType.BARN)
+            switch (type)
             {
-                return config.BarnRequiredUpgradeLevel;
-            } else if (type == Buildings.AnimalBuildingType.COOP)
+                case Buildings.AnimalBuildingType.BARN:
+                    return config.BarnRequiredUpgradeLevel;
+                case Buildings.AnimalBuildingType.COOP:
+                    return config.CoopRequiredUpgradeLevel;
+                default:
+                    return 0;
+            }
+        }
+
+
             {
                 return config.CoopRequiredUpgradeLevel;
             }
@@ -112,6 +123,7 @@ namespace AutoAnimalDoors
                 }
                 return eligibleAnimalBuildings;
             }
+
         }
 
         private void SetAllAnimalDoorsState(Buildings.AnimalDoorState state)
@@ -129,9 +141,17 @@ namespace AutoAnimalDoors
                 List<Buildings.AnimalBuilding> eligibleAnimalBuildings = this.EligibleAnimalBuildings;
                 foreach (Buildings.AnimalBuilding animalBuilding in eligibleAnimalBuildings)
                 {
-                    if (!animalBuilding.AreAllAnimalsHome())
+
+                    if (config.WarpAnimalsWhileClosingDoors)
                     {
-                        return;
+                        animalBuilding.SendAllAnimalsHome();
+                    }
+                    else
+                    {
+                        if (!animalBuilding.AreAllAnimalsHome())
+                        {
+                            return;
+                        }
                     }
                 }
 
@@ -144,8 +164,8 @@ namespace AutoAnimalDoors
         {
             if (timeOfDayChanged.NewTime >= config.AnimalDoorOpenTime && timeOfDayChanged.NewTime < config.AnimalDoorCloseTime)
             {
-                helper.Events.GameLoop.TimeChanged -= this.OpenAnimalDoors;
                 SetAllAnimalDoorsState(Buildings.AnimalDoorState.OPEN);
+                helper.Events.GameLoop.TimeChanged -= this.OpenAnimalDoors;
             }
         }
     }
