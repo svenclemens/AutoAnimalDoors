@@ -33,14 +33,14 @@ namespace AutoAnimalDoors.StardewValleyWrapper
         {
             get
             {
-                List<Farm> farms = new List<Farm>();
-                farms.Add(new Farm(StardewValley.Game1.getFarm()));
+                LinkedList<Farm> farms = new LinkedList<Farm>();
+                farms.AddLast(new Farm(StardewValley.Game1.getFarm()));
 
                 // Look for custom farms as well
                 foreach (StardewValley.GameLocation location in StardewValley.Game1.locations) {
                     if (location.GetType().IsSubclassOf(typeof(StardewValley.Farm)))
                     {
-                        farms.Add(new Farm((StardewValley.Farm)location));
+                        farms.AddLast(new Farm((StardewValley.Farm)location));
                     }
                 }
                 return farms;
@@ -84,13 +84,13 @@ namespace AutoAnimalDoors.StardewValleyWrapper
             {
                 switch (StardewValley.Game1.currentSeason)
                 {
-                    case "summer":
+                    case @"summer":
                         return Season.SUMMER;
-                    case "fall":
+                    case @"fall":
                         return Season.FALL;
-                    case "winter":
+                    case @"winter":
                         return Season.WINTER;
-                    case "spring":
+                    case @"spring":
                         return Season.SPRING;
                     default:
                         return Season.SPRING;
