@@ -36,9 +36,9 @@ namespace AutoAnimalDoors
         {
             if (IsGoToSleepDialog(menuChangedEventArgs.NewMenu))
             {
-                foreach (Buildings.AnimalBuilding eligibleAnimalBuilding in this.EligibleAnimalBuildings)
+                for(short i = 0; i < this.EligibleAnimalBuildings.Count; ++i)
                 {
-                    eligibleAnimalBuilding.SendAllAnimalsHome();
+                    this.EligibleAnimalBuildings[i].SendAllAnimalsHome();
                 }
             }
         }
